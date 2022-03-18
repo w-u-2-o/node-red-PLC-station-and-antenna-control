@@ -2,6 +2,10 @@
 
 Windows Node Red flows to control station and antenna switching via a Modbus PLC.
 
+SCREENSHOTS
+
+Screenshots can be found in the Github Wiki entry for this repository.
+
 INTRODUCTION
 
 This implementation is highly specific to my particular amateur radio station. Nevertheless, it may be useful in part to other efforts, and as an example of the great things you can do with Modbus communications and a programmable logic controller (PLC).

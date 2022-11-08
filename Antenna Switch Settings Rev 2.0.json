@@ -1,0 +1,549 @@
+[
+    {
+        "id": "7580767ee53ca738",
+        "type": "tab",
+        "label": "Antenna Switch Settings Rev 2.0",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e08c508fd2cc554c",
+        "type": "ui_button",
+        "z": "7580767ee53ca738",
+        "name": "Save",
+        "group": "2704db175e47424c",
+        "order": 12,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "SAVE",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "thetisNetworkSettings",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1290,
+        "y": 360,
+        "wires": [
+            [
+                "09fa3ee63436d0fb",
+                "2ff9b3d5c46498b9"
+            ]
+        ]
+    },
+    {
+        "id": "12f33a46275b1d3c",
+        "type": "ui_toast",
+        "z": "7580767ee53ca738",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "raw": true,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1690,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "09fa3ee63436d0fb",
+        "type": "template",
+        "z": "7580767ee53ca738",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<p style=\"font-size:80%;padding:0;margin:0;\"><span style=\"color:lightblue;\">Settings saved.</span></p>",
+        "output": "str",
+        "x": 1520,
+        "y": 360,
+        "wires": [
+            [
+                "12f33a46275b1d3c"
+            ]
+        ]
+    },
+    {
+        "id": "623f3cb00361ee75",
+        "type": "ui_text",
+        "z": "7580767ee53ca738",
+        "group": "2704db175e47424c",
+        "order": 2,
+        "width": 9,
+        "height": 1,
+        "name": "Antenna Switch Settings Label",
+        "label": "<font size=4,font color=lightblue>Antenna Switch Settings",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 910,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "1ce99e2171ece02e",
+        "type": "ui_etable",
+        "z": "7580767ee53ca738",
+        "payload": "[{\"title\":\"BAND\",\"field\":\"band\",\"headerSort\":false,\"width\":115},{\"title\":\"SWITCH DEC\",\"field\":\"switchDEC\",\"editor\":\"input\",\"headerSort\":false,\"width\":120},{\"title\":\"LABEL\",\"field\":\"label\",\"editor\":\"input\",\"headerSort\":false,\"width\":305}]",
+        "payloadType": "json",
+        "options": "{}",
+        "group": "2704db175e47424c",
+        "name": "Antenna Settings Table",
+        "order": 5,
+        "width": 15,
+        "height": 5,
+        "columns": [],
+        "outputs": 1,
+        "cts": false,
+        "x": 890,
+        "y": 560,
+        "wires": [
+            [
+                "e7b9a3609bc93984"
+            ]
+        ]
+    },
+    {
+        "id": "e173e3b37272d606",
+        "type": "inject",
+        "z": "7580767ee53ca738",
+        "name": "At startup default set default antenna switch settings if none are stored",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "[{\"band\":\"160\",\"switchDEC\":\"130\",\"label\":\"AMP/ANT1: INV L<br>ANT2: DIPOLE\"},{\"band\":\"80\",\"switchDEC\":\"130\",\"label\":\"AMP/ANT1: INV L<br>ANT2: DIPOLE\"},{\"band\":\"60\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"40\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"30\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"20\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"17\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"15\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"12\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"10\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"},{\"band\":\"6\",\"switchDEC\":\"40\",\"label\":\"AMP/ANT1: DIPOLE<br>ANT2: INV L\"}]",
+        "payloadType": "json",
+        "x": 450,
+        "y": 500,
+        "wires": [
+            [
+                "423a63f885b7959a"
+            ]
+        ]
+    },
+    {
+        "id": "e902734a8d5a8dcd",
+        "type": "change",
+        "z": "7580767ee53ca738",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "antennaSettingsTable",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1610,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "08867ddfea9b17b3",
+        "type": "file",
+        "z": "7580767ee53ca738",
+        "name": "Write antenna_settings.json",
+        "filename": "C:\\node-red\\antenna_settings.json",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1640,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e7b9a3609bc93984",
+        "type": "function",
+        "z": "7580767ee53ca738",
+        "name": "Update global.antennaSettingsTable on changes to table",
+        "func": "var currentAntennaSettingsTable = global.get(\"antennaSettingsTable\");\nvar updatedRow = [msg.payload];\nvar updatedAntennaSettingsTable = currentAntennaSettingsTable.map(obj => updatedRow.find(o => o.band === obj.band) || obj);\nmsg.payload = updatedAntennaSettingsTable;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 560,
+        "wires": [
+            [
+                "e902734a8d5a8dcd"
+            ]
+        ]
+    },
+    {
+        "id": "2ff9b3d5c46498b9",
+        "type": "change",
+        "z": "7580767ee53ca738",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "antennaSettingsTable",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1540,
+        "y": 500,
+        "wires": [
+            [
+                "08867ddfea9b17b3"
+            ]
+        ]
+    },
+    {
+        "id": "423a63f885b7959a",
+        "type": "file in",
+        "z": "7580767ee53ca738",
+        "name": "Read antenna_settings.json",
+        "filename": "C:\\node-red\\antenna_settings.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 400,
+        "y": 560,
+        "wires": [
+            [
+                "701876b8db472334"
+            ]
+        ]
+    },
+    {
+        "id": "a89318a91ee57fb8",
+        "type": "catch",
+        "z": "7580767ee53ca738",
+        "name": "Catch autodrive file read error",
+        "scope": [
+            "423a63f885b7959a"
+        ],
+        "uncaught": false,
+        "x": 400,
+        "y": 620,
+        "wires": [
+            [
+                "701876b8db472334"
+            ]
+        ]
+    },
+    {
+        "id": "701876b8db472334",
+        "type": "json",
+        "z": "7580767ee53ca738",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 650,
+        "y": 620,
+        "wires": [
+            [
+                "1ce99e2171ece02e",
+                "e902734a8d5a8dcd"
+            ]
+        ]
+    },
+    {
+        "id": "6c9c985e78dcd253",
+        "type": "comment",
+        "z": "7580767ee53ca738",
+        "name": "Read, set and write antenna switch settings",
+        "info": "",
+        "x": 280,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f85b45805cd6d287",
+        "type": "comment",
+        "z": "7580767ee53ca738",
+        "name": "Main button definition",
+        "info": "",
+        "x": 220,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "af3552a3124d86c6",
+        "type": "ui_ui_control",
+        "z": "7580767ee53ca738",
+        "name": "Go to settings tab",
+        "events": "change",
+        "x": 710,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8370aa813b275b42",
+        "type": "ui_button",
+        "z": "7580767ee53ca738",
+        "name": "Go to main tab",
+        "group": "2704db175e47424c",
+        "order": 9,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "RETURN",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "arrow_back",
+        "payload": "{\"tab\":\"STATION CONTROLLER MAIN\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "8abe982a8c9b2f99"
+            ]
+        ]
+    },
+    {
+        "id": "8abe982a8c9b2f99",
+        "type": "ui_ui_control",
+        "z": "7580767ee53ca738",
+        "name": "Go to main tab",
+        "events": "change",
+        "x": 700,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38fb43841e08c1df",
+        "type": "ui_button",
+        "z": "7580767ee53ca738",
+        "name": "Go to antenna settings tab",
+        "group": "17aaa8a63c2a9614",
+        "order": 1,
+        "width": 1,
+        "height": 1,
+        "passthru": false,
+        "label": "",
+        "tooltip": "Antenna switch settings",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "settings",
+        "payload": "{\"tab\":\"ANT SWITCH SETTINGS\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 380,
+        "y": 200,
+        "wires": [
+            [
+                "af3552a3124d86c6",
+                "423a63f885b7959a"
+            ]
+        ]
+    },
+    {
+        "id": "d6ef4de8b9e47bdd",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 1,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "576f10c5bb215ad7",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 3,
+        "width": 11,
+        "height": 1
+    },
+    {
+        "id": "e526cb78bf923601",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 4,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "b7d19d98175bf154",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 6,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "bec2ec06e80a11fc",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 7,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "16dbea5d255673b5",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 8,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "4088c3533d0af9a9",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 10,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "0a67828df6bcb1f4",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 11,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "aee4f3daf1a545f9",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 13,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "fafd587535fad8b3",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 14,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "fb894c246c02228a",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 15,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "47e1ea3e56c783df",
+        "type": "ui_spacer",
+        "z": "7580767ee53ca738",
+        "name": "spacer",
+        "group": "2704db175e47424c",
+        "order": 16,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "2704db175e47424c",
+        "type": "ui_group",
+        "name": "Ant Switch Settings",
+        "tab": "70077755acf251e4",
+        "order": 1,
+        "disp": false,
+        "width": "30",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "17aaa8a63c2a9614",
+        "type": "ui_group",
+        "name": "Antenna Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 3,
+        "disp": false,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "70077755acf251e4",
+        "type": "ui_tab",
+        "name": "ANT SWITCH SETTINGS",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "7cfa0acacdc9425e",
+        "type": "ui_tab",
+        "name": "STATION CONTROLLER MAIN",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

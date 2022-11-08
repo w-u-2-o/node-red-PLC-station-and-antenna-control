@@ -1,0 +1,1241 @@
+[
+    {
+        "id": "d8a952ea7c30b3f1",
+        "type": "tab",
+        "label": "PLC Station Control 2.0",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4d77da962125f93f",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Read Three Coil Ranges",
+        "func": "//read coils on main PLC Y001 through Y006, base address Y001\n\nmsg.topic = \"Y001\";\nmsg.payload = {'fc': 1, 'unitid': 1, 'address': 8192 , 'quantity': 8 };\nnode.send(msg);\n//if response true:\n//Dummy Load OFF, Tuner OFF, 8000 Bootload ON, 100D Bootload ON -- remaining coils unused\n\n//read coils on C0-08TR module Y101 through Y108, base address Y101\n\nmsg.topic = \"Y101\";\nmsg.payload = {'fc': 1, 'unitid': 1, 'address': 8224, 'quantity': 8};\nnode.send(msg);\n//control lines to antenna switch unit\n//A3, B5, B3, A5, remaining four lines unused -- see station schematic for more information\n\n//read coils on C0-08TR-3 module Y201 through Y208, base address Y201\n\nmsg.topic = \"Y201\";\nmsg.payload = {'fc': 1, 'unitid': 1, 'address': 8256 , 'quantity': 8 };\nnode.send(msg);\n//currently unassigned, will define when new station controller is installed\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 340,
+        "wires": [
+            [
+                "e13f9d00acc2843c"
+            ]
+        ]
+    },
+    {
+        "id": "3f038ca4dcb0e01d",
+        "type": "inject",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Poll PLC 4Hz",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.25",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 340,
+        "wires": [
+            [
+                "4d77da962125f93f"
+            ]
+        ]
+    },
+    {
+        "id": "e13f9d00acc2843c",
+        "type": "modbus-flex-getter",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Read Station PLC",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "logIOActivities": false,
+        "server": "789be74cce3524c9",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 710,
+        "y": 340,
+        "wires": [
+            [
+                "716fb46f0a3625bf",
+                "4b6b8db817d93d19",
+                "2fe18a0a71a425ac",
+                "43ad410aecfdd66b",
+                "674215e195e959dc",
+                "e066e369792ff7b5",
+                "72f0317aadca74d9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "7b0ad35d98be7703",
+        "type": "modbus-flex-write",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Write to Station PLC",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "server": "789be74cce3524c9",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 1580,
+        "y": 920,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "f357f1afcbbb044a",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Automatic antenna switching on C0-08TR module coils Y101 to Y104, corresponding to antenna switch lines A3, B5, B3, A5",
+        "info": "",
+        "x": 470,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "bb6f2c02a8449c65",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Process incoming macro commands",
+        "info": "",
+        "x": 200,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "da8aeb9f51c9414f",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Coils on main PLC Y001 to Y006 Modbus address 8192 ",
+        "info": "",
+        "x": 260,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "9ce552981db890da",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Coils on C0-08TR module Y101 to Y108 Modbus address 8224",
+        "info": "",
+        "x": 290,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "391706ba3a667d46",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Coils on C0-08TR-3 module Y201 to Y208 Modbus address 8256",
+        "info": "",
+        "x": 290,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "782f5a1b393a1aea",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "**** NOTE: Modbus start addresses need to be 1 less than that reported by Click PLC programming software, not sure why!!!",
+        "info": "",
+        "x": 480,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "550400b83b63f56a",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Read coil status from all PLC modules",
+        "info": "",
+        "x": 210,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "2ab42abc6be0b5a9",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Antenna Control Button",
+        "group": "17aaa8a63c2a9614",
+        "order": 2,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "<font size=1>ANT CONTROL",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1050,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1dfbbf886731ba0e",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "UI element definition",
+        "info": "",
+        "x": 150,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "ae42e059a4968490",
+        "type": "ui_text",
+        "z": "d8a952ea7c30b3f1",
+        "group": "17aaa8a63c2a9614",
+        "order": 10,
+        "width": 5,
+        "height": 1,
+        "name": "Spacer element for nice UI",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 1060,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "054d9d0dc7badf47",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "8000 Power",
+        "group": "48c1f32c88db588e",
+        "order": 1,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "radioPower",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 480,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "858df2d41e90a02e",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "8000 BTLDR",
+        "group": "48c1f32c88db588e",
+        "order": 2,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "8000Bootloader",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 520,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "5b2b49cfd90fb5b7",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Dummy Load",
+        "group": "48c1f32c88db588e",
+        "order": 5,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "dummyLoad",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 640,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "687fbd713a0ad66c",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "MFJ Tuner",
+        "group": "48c1f32c88db588e",
+        "order": 6,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "antennaTuner",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 680,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "716fb46f0a3625bf",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form 8000 Power status message & button define",
+        "func": "//get coil data from C0-08TR-3 module Y201 through Y208, base address Y201, Modbus base address 8256\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y201\") {\n    \n    coils = msg.payload;\n    \n// Y205 is ANAN 8000 power relay control and it appears on coils[4], Modbus address 8260\n    \n    if (coils[4])\n    \n        msg.background=\"green\",\n        msg.label=\"<font color=white>8000DLE POWER: ON\",\n        //set button to single coil write message, next press will turn coil off\n        flow.set(\"radioPower\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8260 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"gray\",\n                msg.label=\"<font color=white>8000DLE POWER: OFF\",\n                //set button to send single coil write message, next press will turn coil on\n                flow.set(\"radioPower\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8260 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 480,
+        "wires": [
+            [
+                "922ec75ca720d174"
+            ]
+        ]
+    },
+    {
+        "id": "922ec75ca720d174",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 480,
+        "wires": [
+            [
+                "054d9d0dc7badf47"
+            ]
+        ]
+    },
+    {
+        "id": "4b6b8db817d93d19",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form 8000 Bootloader status message & button define",
+        "func": "//get coil data from main PLC module Y001 through Y006, base address Y001, Modbus base address 8192\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y001\") {\n    \n    coils = msg.payload;\n    \n// Y003 is ANAN 8000 bootloader control line and it appears on coils[2], Modbus address 8194\n    \n    if (coils[2])\n    \n        msg.background=\"yellow\",\n        msg.label=\"<font color=black>8000DLE BTLDR: ON\",\n        //set button to single coil write message, next press will turn coil off\n        flow.set(\"8000Bootloader\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8194 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"green\",\n                msg.label=\"<font color=white>8000DLE BTLDR: OFF\",\n                //set button to send single coil write message, next press will turn coil on\n                flow.set(\"8000Bootloader\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8194 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 520,
+        "wires": [
+            [
+                "78d1db8b651d183b"
+            ]
+        ]
+    },
+    {
+        "id": "78d1db8b651d183b",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 520,
+        "wires": [
+            [
+                "858df2d41e90a02e"
+            ]
+        ]
+    },
+    {
+        "id": "37b2bf52b3fdc7ee",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 640,
+        "wires": [
+            [
+                "5b2b49cfd90fb5b7"
+            ]
+        ]
+    },
+    {
+        "id": "2f61376c628ce195",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 680,
+        "wires": [
+            [
+                "687fbd713a0ad66c"
+            ]
+        ]
+    },
+    {
+        "id": "2fe18a0a71a425ac",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form Dummy Load status message & button define",
+        "func": "//get coil data from PLC C0-08TR-3 module coils Y001 through Y008, base address Y201, Modbus address 8256\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y201\") {\n    \n    coils = msg.payload;\n    \n// Y201 is dummy load coax switch control line and it appears on coils[0], Modbus address 8256\n\n    if (coils[0] == 0)\n    \n        msg.background=\"green\",\n        msg.label=\"<font color=white>DUMMY LOAD: OFF\",\n        //set button to single coil write message, next press will turn coil on\n        flow.set(\"dummyLoad\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8256 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"yellow\",\n                msg.label=\"<font color=black>DUMMY LOAD: ON\",\n                //set button to send single coil write message, next press will turn coil off\n                flow.set(\"dummyLoad\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8256 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 640,
+        "wires": [
+            [
+                "37b2bf52b3fdc7ee"
+            ]
+        ]
+    },
+    {
+        "id": "43ad410aecfdd66b",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form MFJ tuner status message & button define",
+        "func": "//get coil data from PLC C0-08TR-3 module coils Y001 through Y008, base address Y201, Modbus address 8256\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y201\") {\n    \n    coils = msg.payload;\n    \n// Y003 is the antenna tuner control line and it appears on coils[2], Modbus address 8256\n\n    if (coils[2])\n    \n        msg.background=\"green\",\n        msg.label=\"<font color=white>MFJ TUNER: ON\",\n        //set button to single coil write message, next press will turn coil off\n        flow.set(\"antennaTuner\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8258 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"grey\",\n                msg.label=\"<font color=white>MFJ TUNER: OFF\",\n                //set button to send single coil write message, next press will turn coil on\n                flow.set(\"antennaTuner\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8258 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 680,
+        "wires": [
+            [
+                "2f61376c628ce195"
+            ]
+        ]
+    },
+    {
+        "id": "6f47b3fbd06b322a",
+        "type": "link in",
+        "z": "d8a952ea7c30b3f1",
+        "name": "commandToPLC",
+        "links": [
+            "40175aefc981d39b",
+            "17ae956ac0cc8ce1"
+        ],
+        "x": 165,
+        "y": 1360,
+        "wires": [
+            [
+                "a053909d487460c2"
+            ]
+        ]
+    },
+    {
+        "id": "bb378761e775c1e5",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "commandToPLC",
+        "info": "",
+        "x": 180,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "a053909d487460c2",
+        "type": "switch",
+        "z": "d8a952ea7c30b3f1",
+        "name": "\"XX\" macro command decoder",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "^",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": ";",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "xxat1;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "XXAT1;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "xxat0;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "XXAT0;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "xxdl1;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "XXDL1;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "xxdl0;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "XXDL0;",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 11,
+        "x": 450,
+        "y": 1360,
+        "wires": [
+            [
+                "8e753eae5a538db9"
+            ],
+            [],
+            [
+                "edb87cb565ad1058"
+            ],
+            [
+                "edb87cb565ad1058"
+            ],
+            [
+                "24d5f10210300e7d"
+            ],
+            [
+                "24d5f10210300e7d"
+            ],
+            [
+                "f2ce6a35a67eb7ef"
+            ],
+            [
+                "f2ce6a35a67eb7ef"
+            ],
+            [
+                "690dbab464d7b062"
+            ],
+            [
+                "690dbab464d7b062"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "edb87cb565ad1058",
+        "type": "change",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Generate MFJ tuner ON command",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"value\":1,\"fc\":5,\"unitid\":1,\"address\":8258,\"quantity\":1}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 1320,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "24d5f10210300e7d",
+        "type": "change",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Generate MFJ tuner OFF command",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"value\": 0, \"fc\": 5, \"unitid\": 1, \"address\": 8258 , \"quantity\": 1}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 1360,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "8b031365d0f28df2",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Antenna Switch Setting Lookup",
+        "func": "thetisBand = msg.payload; //get incoming band message\nantennaSettingsTable = global.get(\"antennaSettingsTable\"); //get antenna switch settings table\nrow = antennaSettingsTable.find(element => element.band === thetisBand); //find the matching row in the table\nswitchDEC = row.switchDEC; //return drive level from that row\nmsg.payload = switchDEC;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1120,
+        "wires": [
+            [
+                "7ec18ed2cae1c67a"
+            ]
+        ]
+    },
+    {
+        "id": "8e753eae5a538db9",
+        "type": "change",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Decode KPA1500 Band Command",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN00;",
+                "fromt": "str",
+                "to": "160",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN01;",
+                "fromt": "str",
+                "to": "80",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN02;",
+                "fromt": "str",
+                "to": "60",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN03;",
+                "fromt": "str",
+                "to": "40",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN04;",
+                "fromt": "str",
+                "to": "30",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN05;",
+                "fromt": "str",
+                "to": "20",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN06;",
+                "fromt": "str",
+                "to": "17",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN07;",
+                "fromt": "str",
+                "to": "15",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN08;",
+                "fromt": "str",
+                "to": "12",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN09;",
+                "fromt": "str",
+                "to": "10",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "^BN10;",
+                "fromt": "str",
+                "to": "6",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 1120,
+        "wires": [
+            [
+                "8b031365d0f28df2"
+            ]
+        ]
+    },
+    {
+        "id": "7ec18ed2cae1c67a",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Decode DECIMAL value and form PLC command",
+        "func": "/*=========== PLC COMMAND REFERENCE =========================\n\nFunction codes currently supported include:\nFC 5: Force Single Coil\nFC 6: Preset Single Register\nFC 15: Force Multiple Coils\nFC 16: Preset Multiple Registers\nInput parameter for connecting Modbus\n\nunitid (0..255 tcp | 0..247 serial) - overrides default Unit-ID\nfc (5|6|15|16)\nstart address (0:65535)\nquantity (1:65535) of coils/inputs/registers to be written from the start address\nFor FC 5, msg.payload must be a value of 1 or 0 or true or false. For FC 6, msg.payload must be a single value between 0:65535. For FC 16, msg.payload must be an array[] of comma separated values between 0:65535 each.\n\nOutput 1: all given data, modbus response Buffer, input message\n\nOutput 2: modbus response Buffer, all given data, input message\n\nFunction node code example for single write:\n\nmsg.payload = { value: msg.payload, 'fc': 5, 'unitid': 1, 'address': 0 , 'quantity': 1 } return msg\nFunction node code example for multiple write:\n\nmsg.payload = { value: msg.payload, 'fc': 15, 'unitid': 1, 'address': 0 , 'quantity': 10 } return msg\n\n===============================================================*/\n\n/*============== WU2O PLC & ANTENNA SWITCH OPERATION ==========\n\nAntenna switch is a 2x6 matrix, ports labeled A and B and 1 through 6\n\nPort A is amplifier on radio ANT1\nPort B is radio ANT2\nPort 3 3 is inverted L antenna\nPort 5 is dipole array antenna\n\nOnly those lines are currently supported/wired but this could change in the future\nso full DECIMAL decoding is supported below\n\nTo control we write coils on PLC C0-08TR module Y101 through Y108\ncorresponding to antenna switch lines A2, A3, A4, A5 & B2, B3, B4, B5 in that order\n\nThus a DECIMAL \"40\" is dipole on AMP/ANT1, inverted L on ANT2\nThus a DECIMAL \"130\" is inverted L on AMP/ANT1, dipole on ANT2\n\n=================================================================*/\n\nswitchDEC = parseInt(msg.payload); //convert from string to decimal number\n\nswitchBIN = switchDEC.toString(2); //convert from decimal number to binary\n\nswitchBIN = \"00000000\".substr(switchBIN.length) + switchBIN; //pad to eight binary digits as required, result is a string\n\narray = switchBIN.split(\"\"); //split into array of eight binary string characters\n\nbits = array.map(Number); //convert to array of binary numbers\n\nbits = bits.reverse() //got to reverse the array because least significant digit for modbus command is leftmost\n\nmsg.payload = {value: bits, 'fc': 15, 'unitid': 1, 'address': 8224 , 'quantity': 8 }; //form and send the modbus command\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 1160,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "72f0317aadca74d9",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Obtain antenna configuration label for current PLC/switch state",
+        "func": "//C0-08TR module coil data Y101 to Y108\n//corresponding to antenna switch lines A2, A3, A4, A5 & B2, B3, B4, B5 in that order\n//A output is AMP/ANT1, B output is ANT2\n//Ant 3 is inverted L, Ant 5 is dipole array\n//*** Don't forget arrays start at ZERO so line A2 is coil[0] !!!\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y101\") {\n    \n    coils = msg.payload;\n    dec = coils[0]*1 + coils[1]*2 + coils[2]*4 + coils[3]*8 + coils[4]*16 + coils[5]*32 + coils[6]*64 + coils[7]*128;\n\n    antennaSettingsTable = global.get(\"antennaSettingsTable\"); //get antenna switch settings table \n    row = antennaSettingsTable.find(element => element.switchDEC === dec.toString()); //find the matching row in the table\n    label = row.label; //return the antenna configuration label from that row\n    msg.payload = label;\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 800,
+        "wires": [
+            [
+                "ab92e10ceefdbfb9"
+            ]
+        ]
+    },
+    {
+        "id": "ab92e10ceefdbfb9",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 830,
+        "y": 800,
+        "wires": [
+            [
+                "e5e07f90d57a571e"
+            ]
+        ]
+    },
+    {
+        "id": "e5e07f90d57a571e",
+        "type": "ui_template",
+        "z": "d8a952ea7c30b3f1",
+        "group": "17aaa8a63c2a9614",
+        "name": "Antenna switch status display",
+        "order": 3,
+        "width": 5,
+        "height": 2,
+        "format": "<div style=\"font-size:80%;color:lightblue;padding:0;margin:7px;\" ng-bind-html=\"msg.payload\"></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1060,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2ce6a35a67eb7ef",
+        "type": "change",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Generate dummy load ON command",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"value\":0,\"fc\":5,\"unitid\":1,\"address\":8256,\"quantity\":1}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 910,
+        "y": 1440,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "690dbab464d7b062",
+        "type": "change",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Generate dummy load OFF command",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"value\": 1, \"fc\": 5, \"unitid\": 1, \"address\": 8256 , \"quantity\": 1}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 910,
+        "y": 1480,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "50b6b99a1d31cc24",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "xxat1; = tuner on, xxat0; = tuner off",
+        "info": "",
+        "x": 880,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "1c621e0f786887b8",
+        "type": "comment",
+        "z": "d8a952ea7c30b3f1",
+        "name": "xxdl1; = dummy load on, xxdl0; = dummy load off",
+        "info": "",
+        "x": 920,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "910e4cab8561813a",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "100D Power",
+        "group": "48c1f32c88db588e",
+        "order": 3,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "radio2Power",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 560,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "2270bcc658de2488",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 560,
+        "wires": [
+            [
+                "910e4cab8561813a"
+            ]
+        ]
+    },
+    {
+        "id": "674215e195e959dc",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form 100D power status message & button define",
+        "func": "//get coil data from C0-08TR-3 module Y201 through Y208, base address Y201, Modbus base address 8256\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y201\") {\n    \n    coils = msg.payload;\n    \n// Y207 is ANAN 100D power relay control and it appears on coils[6], Modbus address 8262\n    \n    if (coils[6])\n    \n        msg.background=\"green\",\n        msg.label=\"<font color=white>100D POWER: ON\",\n        //set button to single coil write message, next press will turn coil off\n        flow.set(\"radio2Power\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8262 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"gray\",\n                msg.label=\"<font color=white>100D POWER: OFF\",\n                //set button to send single coil write message, next press will turn coil on\n                flow.set(\"radio2Power\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8262 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 560,
+        "wires": [
+            [
+                "2270bcc658de2488"
+            ]
+        ]
+    },
+    {
+        "id": "b6ea02e2a0662d30",
+        "type": "ui_button",
+        "z": "d8a952ea7c30b3f1",
+        "name": "100D BTLDR",
+        "group": "48c1f32c88db588e",
+        "order": 4,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "100DBootloader",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 600,
+        "wires": [
+            [
+                "7b0ad35d98be7703"
+            ]
+        ]
+    },
+    {
+        "id": "fc699b2bcb9a9553",
+        "type": "rbe",
+        "z": "d8a952ea7c30b3f1",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 770,
+        "y": 600,
+        "wires": [
+            [
+                "b6ea02e2a0662d30"
+            ]
+        ]
+    },
+    {
+        "id": "e066e369792ff7b5",
+        "type": "function",
+        "z": "d8a952ea7c30b3f1",
+        "name": "Form 100D Bootloader status message & button define",
+        "func": "//get coil data from main PLC module Y001 through Y006, base address Y001, Modbus base address 8192\n\nvar coils = [];\n\n//only process the message if the topic is equal to the correct PLC base address\n\nbaseAddress = msg.topic;\n\nif (baseAddress==\"Y001\") {\n    \n    coils = msg.payload;\n    \n// Y004 is ANAN 100D bootloader control line and it appears on coils[3], Modbus address 8195\n    \n    if (coils[3])\n    \n        msg.background=\"yellow\",\n        msg.label=\"<font color=black>100D BTLDR: ON\",\n        //set button to single coil write message, next press will turn coil off\n        flow.set(\"100DBootloader\", { value: 0, 'fc': 5, 'unitid': 1, 'address': 8195 , 'quantity': 1 });\n        \n            else\n            \n                msg.background=\"green\",\n                msg.label=\"<font color=white>100D BTLDR: OFF\",\n                //set button to send single coil write message, next press will turn coil on\n                flow.set(\"100DBootloader\", { value: 1, 'fc': 5, 'unitid': 1, 'address': 8195 , 'quantity': 1 });\n    \n    node.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 600,
+        "wires": [
+            [
+                "fc699b2bcb9a9553"
+            ]
+        ]
+    },
+    {
+        "id": "98f447f7f5a739ac",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "17aaa8a63c2a9614",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "bdf6dd2441686696",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "17aaa8a63c2a9614",
+        "order": 9,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "ec0813d103109434",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "4af4d08c70d2f779",
+        "order": 9,
+        "width": 12,
+        "height": 1
+    },
+    {
+        "id": "e72baa91af8fbe98",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "4af4d08c70d2f779",
+        "order": 16,
+        "width": 12,
+        "height": 1
+    },
+    {
+        "id": "61ed86131aa61036",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "d1f18380c9713791",
+        "order": 2,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "24a2fe4714e7ed54",
+        "type": "ui_spacer",
+        "z": "d8a952ea7c30b3f1",
+        "name": "spacer",
+        "group": "d1f18380c9713791",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "789be74cce3524c9",
+        "type": "modbus-client",
+        "name": "Radio Station PLC Controller",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "tcpHost": "plc.coffinbrook",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": 1,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": 2000,
+        "parallelUnitIdsAllowed": true
+    },
+    {
+        "id": "17aaa8a63c2a9614",
+        "type": "ui_group",
+        "name": "Antenna Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 3,
+        "disp": false,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "48c1f32c88db588e",
+        "type": "ui_group",
+        "name": "Station Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 2,
+        "disp": false,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4af4d08c70d2f779",
+        "type": "ui_group",
+        "name": "KPA1500 Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 4,
+        "disp": false,
+        "width": 30,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d1f18380c9713791",
+        "type": "ui_group",
+        "name": "GPSDO STATUS",
+        "tab": "7cfa0acacdc9425e",
+        "order": 5,
+        "disp": false,
+        "width": "7",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7cfa0acacdc9425e",
+        "type": "ui_tab",
+        "name": "STATION CONTROLLER MAIN",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

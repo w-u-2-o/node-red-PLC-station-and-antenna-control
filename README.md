@@ -1,5 +1,13 @@
 # node-red-PLC-station-and-antenna-control
 
+REVISION 2.0
+
+Added and rearranged some functionality.
+Eliminated hard coded antenna switch settings, added user adjustable settings for switch control and antenna configuration naming.
+
+
+INITIAL RELEASE
+
 Windows Node Red flows to control station and antenna switching via a Modbus PLC.
 
 SCREENSHOTS
